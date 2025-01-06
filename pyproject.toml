@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "to_3mf"
+version = "0.1.0"
+authors = [
+  { name="Gianni Mariani", email="gianni@mariani.ws" },
+]
+description = "A set of Python tools for managing the 3mf file format. Includes an STL to 3mf file converter."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  "xdatatrees>=0.1.0",
+  "numpy",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/owebeeone/to_3mf"
+"Bug Tracker" = "https://github.com/owebeeone/to_3mf/issues"
+
+[tool.hatch.envs.test]
+dependencies = [
+  "pytest>=7.0.0",
+  "pytest-cov>=4.0.0",
+] 
