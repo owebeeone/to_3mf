@@ -4,7 +4,8 @@ GMatrix and GVector objects to and from strings used in 3mf file attributes
 for matrix, transform and vector strings.
 '''
 
-from anchorscad import GMatrix, GVector, datatree, dtfield
+from anchorscad_lib.linear import GMatrix, GVector
+from datatrees import datatree, dtfield
 
 from typing import Union
 import re

@@ -18,7 +18,14 @@ classifiers = [
 ]
 dependencies = [
   "xdatatrees>=0.1.0",
+  "anchorscad-test-tools",
+  "anchorscad-linear",
+  "anchorscad-utils",
   "numpy",
+  "lxml",
+  "numpy-stl",
+  "datatrees",
+  "pythonopenscad",
 ]
 
 [project.urls]

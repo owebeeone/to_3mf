@@ -2,13 +2,13 @@
 3mf XML xdatatree classes for the 3mf config file.
 '''
 
-from anchorscad.xdatatrees import xdatatree, xfield, Attribute, \
+from xdatatrees import xdatatree, xfield, Attribute, \
     Element, CamelSnakeConverter, SnakeCamelConverter, XmlSerializationSpec, \
     MetadataNameValue, ValueCollector, XmlNamespaces
 
-from anchorscad import datatree, dtfield
+from datatrees import datatree, dtfield
 
-from anchorscad.xdatatree_utils import TransformConverter
+from to_3mf.xdatatree_utils import TransformConverter
 
 from typing import List, Tuple
 import numpy as np
