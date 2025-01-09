@@ -1,12 +1,12 @@
 from to_3mf.threemf_config import SERIALIZATION_SPEC as CONFIG_SERIALIZATION_SPEC
 from to_3mf.threemf_model import SERIALIZATION_SPEC as MODEL_SERIALIZATION_SPEC
 
-import lxml.etree as etree 
+import lxml.etree as etree
 
 from unittest import TestCase, main
 
 
-XML_DATA = '''\
+XML_DATA = """\
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
   <object id="2">
@@ -104,9 +104,9 @@ XML_DATA = '''\
    <assemble_item object_id="8" instance_id="0" transform="1 0 0 0 1 0 0 0 1 40 -20 10" offset="0 0 0" />
   </assemble>
 </config>
-'''
+"""
 
-XML_DATA2 = '''\
+XML_DATA2 = """\
 <?xml version="1.0" encoding="UTF-8"?>
 <model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" xmlns:slic3rpe="http://schemas.slic3r.org/3mf/2017/06" xmlns:p="http://schemas.microsoft.com/3dmanufacturing/production/2015/06" requiredextensions="p">
  <metadata name="Application">BambuStudio-01.07.04.52</metadata>
@@ -150,9 +150,9 @@ XML_DATA2 = '''\
   <item objectid="8" p:uuid="00000008-b1ec-4553-aec9-835e5b724bb4" transform="1 0 0 0 1 0 0 0 1 160.251097 100.519201 10" printable="1"/>
  </build>
 </model>
-'''
+"""
 
-XML_DATA3 = '''\
+XML_DATA3 = """\
 <?xml version="1.0" encoding="UTF-8"?>
 <model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" xmlns:slic3rpe="http://schemas.slic3r.org/3mf/2017/06" xmlns:p="http://schemas.microsoft.com/3dmanufacturing/production/2015/06" requiredextensions="p">
  <metadata name="BambuStudio:3mfVersion">1</metadata>
@@ -187,36 +187,35 @@ XML_DATA3 = '''\
   </object>
  </resources>
 </model>
-'''
+"""
+
 
 class ExtrudeTest(TestCase):
-
     def getXml(self):
-         return etree.fromstring(XML_DATA.encode('utf-8'))
-    
+        return etree.fromstring(XML_DATA.encode("utf-8"))
+
     def getXml2(self):
-         return etree.fromstring(XML_DATA2.encode('utf-8'))
-     
+        return etree.fromstring(XML_DATA2.encode("utf-8"))
+
     def getXml3(self):
-         return etree.fromstring(XML_DATA3.encode('utf-8'))
-    
-        
+        return etree.fromstring(XML_DATA3.encode("utf-8"))
+
     def testSerializationSpec_config(self):
         config, status = CONFIG_SERIALIZATION_SPEC.deserialize(self.getXml())
         self.assertEqual(status.contains_unknown_elements, False)
         self.assertEqual(status.contains_unknown_attributes, False)
         self.assertEqual(len(config.objects), 4)
-        
+
         new_tree = CONFIG_SERIALIZATION_SPEC.serialize(config)
         config1, status = CONFIG_SERIALIZATION_SPEC.deserialize(new_tree)
         self.assertEqual(config, config1)
-        
+
     def testSerializationSpec_model2(self):
         model, status = MODEL_SERIALIZATION_SPEC.deserialize(self.getXml2())
         self.assertEqual(status.contains_unknown_elements, False)
         self.assertEqual(status.contains_unknown_attributes, False)
         self.assertEqual(len(model.build.items), 4)
-        
+
         new_tree = MODEL_SERIALIZATION_SPEC.serialize(model)
         model1, status = MODEL_SERIALIZATION_SPEC.deserialize(new_tree)
         self.assertEqual(model, model1)
@@ -226,11 +225,12 @@ class ExtrudeTest(TestCase):
         self.assertEqual(status.contains_unknown_elements, False)
         self.assertEqual(status.contains_unknown_attributes, False)
         self.assertEqual(len(model.resources.objects[0].mesh.vertices.vertices), 8)
-        
+
         new_tree = MODEL_SERIALIZATION_SPEC.serialize(model)
         model1, status = MODEL_SERIALIZATION_SPEC.deserialize(new_tree)
         self.assertEqual(model, model1)
 
-if __name__ == "__main__":    
-    #import sys; sys.argv = ['', 'ExtrudeTest.testDeserialize3']
+
+if __name__ == "__main__":
+    # import sys; sys.argv = ['', 'ExtrudeTest.testDeserialize3']
     main()

@@ -28,7 +28,7 @@ from unittest import TestCase, main
 
 @datatree
 class GMatrix:
-    matrix: np.ndarray = dtfield(doc='The matrix as a numpy array')
+    matrix: np.ndarray = dtfield(doc="The matrix as a numpy array")
 
     @property
     def A(self):
@@ -40,7 +40,7 @@ class GMatrix:
 
 @datatree
 class GVector:
-    vector: np.ndarray = dtfield(doc='The vector as a numpy array')
+    vector: np.ndarray = dtfield(doc="The vector as a numpy array")
 
     @property
     def A(self):
@@ -57,8 +57,8 @@ def float_to_str(value: float) -> str:
     Returns:
       A string with the trailing "." removed, if it exists.
     """
-    string = str(value).rstrip('0')
-    if string.endswith('.'):
+    string = str(value).rstrip("0")
+    if string.endswith("."):
         return string[:-1]
     else:
         return string
@@ -66,20 +66,20 @@ def float_to_str(value: float) -> str:
 
 @datatree
 class MatrixConverter:
-    '''Convert a 16 value string like "1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1" to a
-    GMatrix and back.'''
+    """Convert a 16 value string like "1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1" to a
+    GMatrix and back."""
 
-    matrix: GMatrix = dtfield(doc='The matrix as a GMatrix')
+    matrix: GMatrix = dtfield(doc="The matrix as a GMatrix")
 
     def __init__(self, matrix_str: Union[str, GMatrix]):
         if isinstance(matrix_str, GMatrix):
             self.matrix = matrix_str
         else:
-            nparray = np.array([float(x) for x in re.split(r'\s+', matrix_str)])
+            nparray = np.array([float(x) for x in re.split(r"\s+", matrix_str)])
             self.matrix = GMatrix(nparray.reshape((4, 4)))
 
     def __str__(self):
-        return ' '.join([float_to_str(x) for x in self.matrix.A.flatten()])
+        return " ".join([float_to_str(x) for x in self.matrix.A.flatten()])
 
     def __repr__(self):
         return self.__str__()
@@ -87,21 +87,21 @@ class MatrixConverter:
 
 @datatree
 class TransformConverter:
-    '''Convert a 12 value string like "1 0 0 0 1 0 0 0 1 40 40 10" to a GMatrix
-    and back.'''
+    """Convert a 12 value string like "1 0 0 0 1 0 0 0 1 40 40 10" to a GMatrix
+    and back."""
 
-    matrix: GMatrix = dtfield(doc='The matrix as a GMatrix')
+    matrix: GMatrix = dtfield(doc="The matrix as a GMatrix")
 
     def __init__(self, matrix_str: Union[str, GMatrix]):
         if isinstance(matrix_str, GMatrix):
             self.matrix = matrix_str
         else:
-            nparray = np.array([float(x) for x in re.split(r'\s+', matrix_str)])
-            self.matrix = GMatrix(nparray.reshape((3, 4), order='F'))
+            nparray = np.array([float(x) for x in re.split(r"\s+", matrix_str)])
+            self.matrix = GMatrix(nparray.reshape((3, 4), order="F"))
 
     def __str__(self):
-        nparray = self.matrix.A[0:3].reshape((1, 12), order='F')
-        return ' '.join([float_to_str(x) for x in nparray[0]])
+        nparray = self.matrix.A[0:3].reshape((1, 12), order="F")
+        return " ".join([float_to_str(x) for x in nparray[0]])
 
     def __repr__(self):
         return self.__str__()
@@ -109,18 +109,18 @@ class TransformConverter:
 
 @datatree
 class VectorConverter:
-    '''Convert a string like "1 2 3" to a GVector and back.'''
+    """Convert a string like "1 2 3" to a GVector and back."""
 
-    vector: GVector = dtfield(doc='The vector as a GVector')
+    vector: GVector = dtfield(doc="The vector as a GVector")
 
     def __init__(self, vector_str: Union[str, GVector]):
         if isinstance(vector_str, GVector):
             self.vector = vector_str
         else:
-            self.vector = GVector([float(x) for x in re.split(r'\s+', vector_str)])
+            self.vector = GVector([float(x) for x in re.split(r"\s+", vector_str)])
 
     def __str__(self):
-        return ' '.join([float_to_str(x) for x in self.vector.A[0:3]])
+        return " ".join([float_to_str(x) for x in self.vector.A[0:3]])
 
     def __repr__(self):
         return self.__str__()
@@ -128,43 +128,43 @@ class VectorConverter:
 
 # Test xdatatree classes.
 
-'''Create a default config for all xdatatree annotationed classes.'''
+"""Create a default config for all xdatatree annotationed classes."""
 DEFAULT_CONFIG = xfield(ename_transform=CamelSnakeConverter, ftype=Element)
 
 
 @xdatatree
 class MeshStat:
     XDATATREE_CONFIG = DEFAULT_CONFIG(ftype=Attribute)
-    edges_fixed: int = xfield(doc='Number of fixed edges')
-    degenerate_facets: int = xfield(doc='Number of degenerate facets')
-    facets_removed: int = xfield(doc='Number of facets removed')
-    facets_reversed: int = xfield(doc='Number of facets reversed')
-    backwards_edges: int = xfield(doc='Number of backwards edges')
+    edges_fixed: int = xfield(doc="Number of fixed edges")
+    degenerate_facets: int = xfield(doc="Number of degenerate facets")
+    facets_removed: int = xfield(doc="Number of facets removed")
+    facets_reversed: int = xfield(doc="Number of facets reversed")
+    backwards_edges: int = xfield(doc="Number of backwards edges")
 
 
 @xdatatree
 class Part:
     XDATATREE_CONFIG = DEFAULT_CONFIG(ftype=Metadata)
-    id: str = xfield(ftype=Attribute, doc='Id of the part')
-    subtype: str = xfield(ftype=Attribute, doc='Subtype of the part')
-    name: str = xfield(ftype=Metadata, doc='Name of the part')
-    matrix: MatrixConverter = xfield(ftype=Metadata, doc='Frame of ref of the object')
+    id: str = xfield(ftype=Attribute, doc="Id of the part")
+    subtype: str = xfield(ftype=Attribute, doc="Subtype of the part")
+    name: str = xfield(ftype=Metadata, doc="Name of the part")
+    matrix: MatrixConverter = xfield(ftype=Metadata, doc="Frame of ref of the object")
     source_file: str
     source_object_id: str
     source_volume_id: str
     source_offset_x: float
     source_offset_y: float
     source_offset_z: float
-    mesh_stat: MeshStat = xfield(ftype=Element, doc='Mesh statistics of the part')
+    mesh_stat: MeshStat = xfield(ftype=Element, doc="Mesh statistics of the part")
 
 
 @xdatatree
 class Object:
     XDATATREE_CONFIG = DEFAULT_CONFIG(ftype=Attribute)
-    id: int = xfield(ftype=Attribute, doc='Id of the object')
-    name: str = xfield(ftype=Metadata, doc='Name of the object')
-    extruder: str = xfield(ftype=Metadata, doc='Name of the object')
-    parts: List[Part] = xfield(ftype=Element, doc='List of parts')
+    id: int = xfield(ftype=Attribute, doc="Id of the object")
+    name: str = xfield(ftype=Metadata, doc="Name of the object")
+    extruder: str = xfield(ftype=Metadata, doc="Name of the object")
+    parts: List[Part] = xfield(ftype=Element, doc="List of parts")
 
 
 @xdatatree
@@ -185,7 +185,7 @@ class Plate:
     top_file: str
     pick_file: str
     model_instances: List[ModelInstance] = xfield(
-        ename='model_instance', ftype=Element, doc='instances of models on the plate'
+        ename="model_instance", ftype=Element, doc="instances of models on the plate"
     )
 
 
@@ -201,18 +201,18 @@ class AssembleItem:
 @xdatatree
 class Assemble:
     XDATATREE_CONFIG = DEFAULT_CONFIG(ftype=Element)
-    assemble_items: List[AssembleItem] = xfield(ename='assemble_item', doc='List of assemble items')
+    assemble_items: List[AssembleItem] = xfield(ename="assemble_item", doc="List of assemble items")
 
 
 @xdatatree
 class Config:
     XDATATREE_CONFIG = DEFAULT_CONFIG
-    objects: List[Object] = xfield(ename='object', doc='List of objects')
+    objects: List[Object] = xfield(ename="object", doc="List of objects")
     plate: Plate
     assemble: Assemble
 
 
-XML_DATA = '''\
+XML_DATA = """\
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
   <object id="2">
@@ -310,11 +310,11 @@ XML_DATA = '''\
    <assemble_item object_id="8" instance_id="0" transform="1 0 0 0 1 0 0 0 1 40 -20 10" offset="0 0 0" />
   </assemble>
 </config>
-'''
+"""
 
 
 class XmlNamespaces:
-    '''Helper for namespace definitions for XML.'''
+    """Helper for namespace definitions for XML."""
 
     def __init__(self, xml="http://www.w3.org/XML/1998/namespace", **kwargs):
         self.xml = xml
@@ -343,22 +343,22 @@ DEFAULT_CONFIG2X = xfield(
 @xdatatree
 class Component:
     XDATATREE_CONFIG = DEFAULT_CONFIGX(ftype=Attribute)
-    path: str = xfield(xmlns=NAMESPACES.p, doc='Path of the component')
-    objectid: str = xfield(xmlns=None, doc='Object id of the component')
-    transform: TransformConverter = xfield(xmlns=None, doc='Transform of the component')
+    path: str = xfield(xmlns=NAMESPACES.p, doc="Path of the component")
+    objectid: str = xfield(xmlns=None, doc="Object id of the component")
+    transform: TransformConverter = xfield(xmlns=None, doc="Transform of the component")
 
 
 @xdatatree
 class Components:
     XDATATREE_CONFIG = DEFAULT_CONFIGX
-    components: List[Component] = xfield(ftype=Element, doc='List of components')
+    components: List[Component] = xfield(ftype=Element, doc="List of components")
 
 
 @xdatatree
 class Vertex:
-    x: float = xfield(ftype=Attribute, doc='X coordinate of the vertex')
-    y: float = xfield(ftype=Attribute, doc='Y coordinate of the vertex')
-    z: float = xfield(ftype=Attribute, doc='Z coordinate of the vertex')
+    x: float = xfield(ftype=Attribute, doc="X coordinate of the vertex")
+    y: float = xfield(ftype=Attribute, doc="Y coordinate of the vertex")
+    z: float = xfield(ftype=Attribute, doc="Z coordinate of the vertex")
 
     def get_array(self):
         return np.array([self.x, self.y, self.z])
@@ -366,10 +366,10 @@ class Vertex:
 
 @xdatatree
 class Triangle:
-    v1: int = xfield(ftype=Attribute, doc='V1 of the triangle')
-    v2: int = xfield(ftype=Attribute, doc='V2 of the triangle')
-    v3: int = xfield(ftype=Attribute, doc='V3 of the triangle')
-    paint_color: str = xfield(ftype=Attribute, doc='paint_colors of the triangle')
+    v1: int = xfield(ftype=Attribute, doc="V1 of the triangle")
+    v2: int = xfield(ftype=Attribute, doc="V2 of the triangle")
+    v3: int = xfield(ftype=Attribute, doc="V3 of the triangle")
+    paint_color: str = xfield(ftype=Attribute, doc="paint_colors of the triangle")
 
     def get_array(self):
         return np.array([self.v1, self.v2, self.v3])
@@ -377,12 +377,12 @@ class Triangle:
 
 @datatree
 class TriangesCustomConverter(ValueCollector):
-    '''A custom converter for a field representing a list of Triange objects.
+    """A custom converter for a field representing a list of Triange objects.
     This will represent the list of trianges as a numpy array and allow to serialize it
-    back to a list of Triange objects.'''
+    back to a list of Triange objects."""
 
-    triangles: List[np.ndarray] = dtfield(default_factory=list, doc='List of vertices')
-    paint_colors: List[str] = dtfield(default_factory=list, doc='List of paint colors')
+    triangles: List[np.ndarray] = dtfield(default_factory=list, doc="List of vertices")
+    paint_colors: List[str] = dtfield(default_factory=list, doc="List of paint colors")
 
     # This defines is used to read and write the values as xml element.
     CONTAINED_TYPE = Triangle
@@ -390,7 +390,7 @@ class TriangesCustomConverter(ValueCollector):
     def append(self, item: CONTAINED_TYPE):
         if not isinstance(item, self.CONTAINED_TYPE):
             raise ValueError(
-                f'Item must be of type {self.CONTAINED_TYPE.__name__} but received {type(item).__name__}'
+                f"Item must be of type {self.CONTAINED_TYPE.__name__} but received {type(item).__name__}"
             )
         self.triangles.append(item.get_array())
         self.paint_colors.append(item.paint_color)
@@ -407,7 +407,7 @@ class TriangesCustomConverter(ValueCollector):
 class Triangles:
     XDATATREE_CONFIG = DEFAULT_CONFIGX
     triangles_paint_colors: List[Tuple[Triangle, List[str]]] = xfield(
-        ftype=Element, ename='triangle', builder=TriangesCustomConverter, doc='List of triangles'
+        ftype=Element, ename="triangle", builder=TriangesCustomConverter, doc="List of triangles"
     )
 
     def __eq__(self, __value: object) -> bool:
@@ -418,11 +418,11 @@ class Triangles:
 
 @datatree
 class VerticesCustomConverter(ValueCollector):
-    '''A custom converter for a field representing a list of Vertex objects.
+    """A custom converter for a field representing a list of Vertex objects.
     This will represent the list of vertices as a numpy array and allow to serialize it
-    back to a list of Vertex objects.'''
+    back to a list of Vertex objects."""
 
-    vertices: List[np.ndarray] = dtfield(default_factory=list, doc='List of vertices')
+    vertices: List[np.ndarray] = dtfield(default_factory=list, doc="List of vertices")
 
     # This defines is used to read and write the values as xml element.
     CONTAINED_TYPE = Vertex
@@ -430,7 +430,7 @@ class VerticesCustomConverter(ValueCollector):
     def append(self, item: CONTAINED_TYPE):
         if not isinstance(item, self.CONTAINED_TYPE):
             raise ValueError(
-                f'Item must be of type {self.CONTAINED_TYPE.__name__} but received {type(item).__name__}'
+                f"Item must be of type {self.CONTAINED_TYPE.__name__} but received {type(item).__name__}"
             )
         self.vertices.append(item.get_array())
 
@@ -446,7 +446,7 @@ class VerticesCustomConverter(ValueCollector):
 class Vertices:
     XDATATREE_CONFIG = DEFAULT_CONFIGX
     vertices: np.ndarray = xfield(
-        ftype=Element, ename='vertex', builder=VerticesCustomConverter, doc='List of vertices'
+        ftype=Element, ename="vertex", builder=VerticesCustomConverter, doc="List of vertices"
     )
 
     def __eq__(self, __value: object) -> bool:
@@ -458,69 +458,69 @@ class Vertices:
 @xdatatree
 class Mesh:
     XDATATREE_CONFIG = DEFAULT_CONFIGX
-    vertices: Vertices = xfield(ftype=Element, doc='List of vertices')
-    triangles: Triangles = xfield(ftype=Element, doc='List of triangles')
+    vertices: Vertices = xfield(ftype=Element, doc="List of vertices")
+    triangles: Triangles = xfield(ftype=Element, doc="List of triangles")
 
 
 @xdatatree
 class Object2:
     XDATATREE_CONFIG = DEFAULT_CONFIGX
-    id: int = xfield(ftype=Attribute, xmlns=None, doc='Id of the object')
-    uuid: str = xfield(ftype=Attribute, xmlns=NAMESPACES.p, doc='Uuid of the object')
-    type: str = xfield(ftype=Attribute, xmlns=None, doc='Type of the object')
-    components: List[Components] = xfield(ftype=Element, doc='List of components')
-    mesh: Mesh = xfield(ftype=Element, doc='Mesh of the object')
+    id: int = xfield(ftype=Attribute, xmlns=None, doc="Id of the object")
+    uuid: str = xfield(ftype=Attribute, xmlns=NAMESPACES.p, doc="Uuid of the object")
+    type: str = xfield(ftype=Attribute, xmlns=None, doc="Type of the object")
+    components: List[Components] = xfield(ftype=Element, doc="List of components")
+    mesh: Mesh = xfield(ftype=Element, doc="Mesh of the object")
 
 
 @xdatatree
 class Resources:
     XDATATREE_CONFIG = DEFAULT_CONFIGX
-    objects: List[Object2] = DEFAULT_CONFIG(ename='object', doc='List of objects')
+    objects: List[Object2] = DEFAULT_CONFIG(ename="object", doc="List of objects")
 
 
 @xdatatree
 class Item:
     XDATATREE_CONFIG = DEFAULT_CONFIGX(ftype=Attribute, xmlns=None)
-    objectid: str = xfield(doc='Object id of the item')
-    uuid: str = xfield(xmlns=NAMESPACES.p, doc='Uuid of the item')
-    transform: TransformConverter = xfield(doc='Transform of the item')
-    printable: bool = xfield(doc='Printable of the item')
+    objectid: str = xfield(doc="Object id of the item")
+    uuid: str = xfield(xmlns=NAMESPACES.p, doc="Uuid of the item")
+    transform: TransformConverter = xfield(doc="Transform of the item")
+    printable: bool = xfield(doc="Printable of the item")
 
 
 @xdatatree
 class Build:
     XDATATREE_CONFIG = DEFAULT_CONFIGX
-    uuid: str = xfield(ftype=Attribute, xmlns=NAMESPACES.p, doc='Uuid of the build')
-    items: List[Item] = xfield(doc='List of items')
+    uuid: str = xfield(ftype=Attribute, xmlns=NAMESPACES.p, doc="Uuid of the build")
+    items: List[Item] = xfield(doc="List of items")
 
 
 @xdatatree
 class Model:
     XDATATREE_CONFIG = DEFAULT_CONFIG2X(ftype=MetadataNameValue)
-    unit: str = xfield(ftype=Attribute, aname='unit', xmlns=None, doc='Unit of the model')
+    unit: str = xfield(ftype=Attribute, aname="unit", xmlns=None, doc="Unit of the model")
     lang: str = DEFAULT_CONFIG(
-        ftype=Attribute, aname='lang', xmlns=NAMESPACES.xml, doc='Language of the model'
+        ftype=Attribute, aname="lang", xmlns=NAMESPACES.xml, doc="Language of the model"
     )
     requiredextensions: str = DEFAULT_CONFIG(
-        ftype=Attribute, aname='requiredextensions', xmlns=None, doc='Required extensions'
+        ftype=Attribute, aname="requiredextensions", xmlns=None, doc="Required extensions"
     )
-    application: str = xfield(doc='Application creating this model')
-    x3mf_content: str = xfield(aname='BambuStudio:3mfVersion', doc='BambuStudio:3mfVersion')
-    copyright: str = xfield(aname='CopyRight', doc='The copyright string')
-    creation_date: str = xfield(doc='The creation date')
-    description: str = xfield(doc='The description string')
-    designer: str = xfield(doc='The designer string')
-    designer_cover: str = xfield(doc='The designer cover string')
-    designer_user_id: str = xfield(doc='The designer user id string')
-    license: str = xfield(doc='The license string')
-    modification_date: str = xfield(doc='The modification date')
-    origin: str = xfield(doc='The origin string')
-    title: str = xfield(doc='The title string')
-    resources: Resources = xfield(ftype=Element, ename='resources', doc='The resources')
-    build: Build = DEFAULT_CONFIGX(ftype=Element, doc='The build')
+    application: str = xfield(doc="Application creating this model")
+    x3mf_content: str = xfield(aname="BambuStudio:3mfVersion", doc="BambuStudio:3mfVersion")
+    copyright: str = xfield(aname="CopyRight", doc="The copyright string")
+    creation_date: str = xfield(doc="The creation date")
+    description: str = xfield(doc="The description string")
+    designer: str = xfield(doc="The designer string")
+    designer_cover: str = xfield(doc="The designer cover string")
+    designer_user_id: str = xfield(doc="The designer user id string")
+    license: str = xfield(doc="The license string")
+    modification_date: str = xfield(doc="The modification date")
+    origin: str = xfield(doc="The origin string")
+    title: str = xfield(doc="The title string")
+    resources: Resources = xfield(ftype=Element, ename="resources", doc="The resources")
+    build: Build = DEFAULT_CONFIGX(ftype=Element, doc="The build")
 
 
-XML_DATA2 = '''\
+XML_DATA2 = """\
 <?xml version="1.0" encoding="UTF-8"?>
 <model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" xmlns:slic3rpe="http://schemas.slic3r.org/3mf/2017/06" xmlns:p="http://schemas.microsoft.com/3dmanufacturing/production/2015/06" requiredextensions="p">
  <metadata name="Application">BambuStudio-01.07.04.52</metadata>
@@ -564,9 +564,9 @@ XML_DATA2 = '''\
   <item objectid="8" p:uuid="00000008-b1ec-4553-aec9-835e5b724bb4" transform="1 0 0 0 1 0 0 0 1 160.251097 100.519201 10" printable="1"/>
  </build>
 </model>
-'''
+"""
 
-XML_DATA3 = '''\
+XML_DATA3 = """\
 <?xml version="1.0" encoding="UTF-8"?>
 <model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" xmlns:slic3rpe="http://schemas.slic3r.org/3mf/2017/06" xmlns:p="http://schemas.microsoft.com/3dmanufacturing/production/2015/06" requiredextensions="p">
  <metadata name="BambuStudio:3mfVersion">1</metadata>
@@ -601,36 +601,36 @@ XML_DATA3 = '''\
   </object>
  </resources>
 </model>
-'''
+"""
 
 DESERIALIZE_OPTIONS = XmlParserOptions(assert_unused_elements=True, assert_unused_attributes=True)
 
 
 class ExtrudeTest(TestCase):
     def getXml(self):
-        return etree.fromstring(XML_DATA.encode('utf-8'))
+        return etree.fromstring(XML_DATA.encode("utf-8"))
 
     def getXml2(self):
-        return etree.fromstring(XML_DATA2.encode('utf-8'))
+        return etree.fromstring(XML_DATA2.encode("utf-8"))
 
     def getXml3(self):
-        return etree.fromstring(XML_DATA3.encode('utf-8'))
+        return etree.fromstring(XML_DATA3.encode("utf-8"))
 
     def testXfieldFtypeResolution(self):
         conf = DEFAULT_CONFIG
-        conf2 = xfield(ename='object', doc='List of objects')
+        conf2 = xfield(ename="object", doc="List of objects")
         conf3 = conf.apply(conf2)
 
         self.assertEqual(conf3.ftype, Element)
-        self.assertEqual(conf3.ename, 'object')
+        self.assertEqual(conf3.ename, "object")
 
     def testXfield(self):
         conf = xfield(ftype=Attribute)
-        conf2 = xfield(ename='object', doc='List of objects')
+        conf2 = xfield(ename="object", doc="List of objects")
         conf3 = conf.apply(conf2)
 
         self.assertEqual(conf3.ftype, Attribute)
-        self.assertEqual(conf3.ename, 'object')
+        self.assertEqual(conf3.ename, "object")
 
     def testDeserialize(self):
         xml_tree = self.getXml()
@@ -641,7 +641,7 @@ class ExtrudeTest(TestCase):
 
         self.assertEqual(len(config.objects), 4)
 
-        xml_serialized = serialize(config, 'config', xml_tree.nsmap)
+        xml_serialized = serialize(config, "config", xml_tree.nsmap)
 
         etree.indent(xml_serialized)
         serialized_string = etree.tostring(xml_serialized)
@@ -666,7 +666,7 @@ class ExtrudeTest(TestCase):
 
         self.assertEqual(len(model.build.items), 4)
 
-        xml_serialized = serialize(model, 'model', xml_tree.nsmap)
+        xml_serialized = serialize(model, "model", xml_tree.nsmap)
 
         etree.indent(xml_serialized)
         serialized_string = etree.tostring(xml_serialized)
@@ -694,7 +694,7 @@ class ExtrudeTest(TestCase):
 
         self.assertEqual(len(verts), 8)
 
-        xml_serialized = serialize(model, 'model', xml_tree.nsmap)
+        xml_serialized = serialize(model, "model", xml_tree.nsmap)
 
         etree.indent(xml_serialized)
         serialized_string = etree.tostring(xml_serialized)
