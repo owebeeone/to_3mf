@@ -231,8 +231,6 @@ def stl_to_3mf(stl_files, output_stream):
         zipfile.writestr('_rels/.rels', RELS)
         zipfile.writestr('[Content_Types].xml', CONTENT_TYPES)
         zipfile.writestr('3D/3dmodel.model', xmlstr)
-        
-    return 0
 
 def stl_to_scad(stl_files, output_stream):
     '''Convert STL files to OpenSCAD format.

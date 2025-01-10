@@ -15,18 +15,18 @@ on numpy accelerated systems.
 You can run the converter using Python's module syntax (the output file name must end in .3mf):
 
 ```
-python -m to_3mf.stl_to_3mf <stl_file_1> <stl_file_2> <output_file>.3mf
+python -m to_3mf.stl_to_3mf <stl_file_1> ... <stl_file_N> <output_file>.3mf
 ```
 
 Or to convert to OpenSCAD format (file name must end in .scad):
 
 ```
-python -m to_3mf.stl_to_3mf <stl_file_1> <stl_file_2> <output_file>.scad
+python -m to_3mf.stl_to_3mf <stl_file_1> ... <stl_file_N> <output_file>.scad
 ```
 
 ### Programmatic Usage
 
-The `stl_to_3mf` function can be used to convert STL files to 3MF or OpenSCAD files programmatically.
+Used as a module, the `to_3mf.stl_to_3mf` function `stl_to_3mf` can be used to convert STL files to 3MF or `stl_to_scad` can be used to convert STL files to OpenSCAD files programmatically.
 
 ```
 from to_3mf.stl_to_3mf import stl_to_3mf
@@ -37,21 +37,27 @@ stl_to_3mf(['test_file_01.stl', 'test_file_02.stl'], 'test_result.3mf')
 Or you can get in memory representation like this:
 
 ```python
-from to_3mf.stl_to_3mf import stl_to_model_group, ModelGroup
+from to_3mf.stl_to_3mf import stl_to_3mf
 
-# Convert STL files to 3MF
-models: ModelGroup = stl_to_model_group(stl_files)
+# Create an in-memory buffer for the output
+output_buffer = io.BytesIO()
+# Convert STL to 3MF
+stl_to_3mf(stl_files, output_buffer)
+
+# Or convert to OpenSCAD
+output_buffer = io.StringIO()
+stl_to_scad(stl_files, output_buffer)
 ```
 
 ### Future
 
-This was a quick and dirty implementation. I'm interested in providing more features 
-but right now, it's seems like it's all I need. The threemf_model and threemf_config
+This was a quick and dirty implementation. The is interest in providing more features 
+but right now, it's seems like it's all that is needed. The threemf_model and threemf_config
 modules are not used here as this pre-dates the xdatatree libraries.
 
-## 3MF Model and Config APIs
+## 3MF Model and Config APIs `threemf_model` and `threemf_config`
 
-The package provides two main APIs for working with 3MF files:
+The `to_3mf` package provides XML serialization/deserialization APIs for working with 3MF files. These are a work in progress but are functional.
 
 ### ThreeMF Model API
 
@@ -124,3 +130,60 @@ xml_content = SERIALIZATION_SPEC.serialize(config)
 # Deserialize the config from XML
 config: Config = SERIALIZATION_SPEC.deserialize(xml_content)
 ```
+## Slicer Project File Editor
+
+The `slicer_project_file_editor.py` module provides tools for manipulating 3MF slicer project files. This is particularly useful for working with slicer-specific 3MF files that contain both model data and printer configuration settings.
+
+**Note: This is a work in progress and the API will change.**
+
+### Usage
+
+```python
+from to_3mf.slicer_project_file_editor import SlicerProjectFileEditor, Options
+from io import BytesIO
+
+# Create options for the editor
+options = Options(
+    print_xml_unused=False,      # Don't print warnings about unknown XML elements
+    assert_xml_unused=False,     # Don't assert on unknown XML elements
+    recover_xml_errors=True,     # Try to recover from XML parsing errors
+    recover_undeclared_namespace=True  # Handle undeclared XML namespaces
+)
+
+# Create editor from a template file
+editor = SlicerProjectFileEditor(
+    template_file="input.3mf",
+    output_file="output.3mf", 
+    options=options
+)
+
+# Make changes to the file here....
+
+# Write the modified project
+editor.write()
+```
+
+### Command Line Interface
+
+The editor can also be used from the command line:
+
+```bash
+python -m to_3mf.slicer_project_file_editor input.3mf output.3mf [options]
+```
+
+Options include:
+- `--print-xml-unused/--noprint-xml-unused`: Control warnings about unknown XML elements
+- `--assert-xml-unused/--noassert-xml-unused`: Control assertions on unknown XML elements
+- `--recover-xml-errors/--norecover-xml-errors`: Control XML error recovery
+- `--recover-undeclared-namespace/--norecover-undeclared-namespace`: Control handling of undeclared namespaces
+
+### Features
+
+- Load and parse 3MF slicer project files
+- Access and modify model data and printer configurations
+- Handle multiple model files within a single project
+- Preserve metadata and other project files
+- Support for both file-based and in-memory operations
+
+The editor uses the `threemf_model` and `threemf_config` APIs internally to parse and manipulate the 3MF data structures.
+ 
