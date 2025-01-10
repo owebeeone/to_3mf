@@ -57,7 +57,7 @@ stl_to_scad(stl_files, output_buffer)
 
 ### Future
 
-This was a quick and dirty implementation. The is interest in providing more features 
+This was a quick and dirty implementation. There is interest in providing more features 
 but right now, it's seems like it's all that is needed. The threemf_model and threemf_config
 modules are not used here as this pre-dates the xdatatree libraries.
 
