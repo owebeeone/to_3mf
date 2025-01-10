@@ -1,8 +1,0 @@
-xdatatrees>=0.1.0
-numpy
-lxml
-numpy-stl
-datatrees
-anchorscad-test-tools
-anchorscad-linear
-anchorscad-utils
