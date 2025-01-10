@@ -173,7 +173,7 @@ class ColourGroupGenerator:
     
     def get_colour_group(self, id):
         colour = self.get_colour(id)
-        cg = ColourGroup(f'm{self.current_id}', colour)
+        cg = ColourGroup(f'm{id}', colour)
         return cg
     
     def get_next_colour_group(self):
