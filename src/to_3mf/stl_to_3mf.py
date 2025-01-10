@@ -253,7 +253,8 @@ def stl_to_scad(stl_files, output_stream):
         output_stream.write('\n}\n')
 
 def main():
-    parser = ArgumentParser(description='Convert a list of STL files to a 3MF or OpenSCAD file.')
+    parser = ArgumentParser(
+        description='Convert a list of STL files to a 3MF (.3mf) or OpenSCAD (.scad) file.')
     parser.add_argument('stl_files', nargs='+', help='List of STL files')
     parser.add_argument('output_file', help='Output 3MF file')
 
