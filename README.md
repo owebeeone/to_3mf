@@ -1,6 +1,12 @@
 # to_3mf
 A set of Python tools for managing the 3mf file format. Includes an STL to 3mf file converter.
 
+## Installation
+
+```
+pip install to_3mf
+```
+
 ## STL to 3MF Converter
 
 The `stl_to_3mf.py` script converts one or more STL files into a single 3MF file or OpenSCAD file. Each STL model is assigned a unique color in the output 3MF file.
@@ -186,4 +192,3 @@ Options include:
 - Support for both file-based and in-memory operations
 
 The editor uses the `threemf_model` and `threemf_config` APIs internally to parse and manipulate the 3MF data structures.
- 
