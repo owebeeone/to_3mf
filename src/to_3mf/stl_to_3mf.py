@@ -7,7 +7,6 @@ from typing import List, Tuple
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 from collections import OrderedDict
-import sys
 from argparse import ArgumentParser
 import pythonopenscad as posc
 
